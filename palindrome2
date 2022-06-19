@@ -1,0 +1,38 @@
+
+
+
+/*
+Length of longest palindrome 
+"/
+
+
+
+for test_case in range(1,11):
+    t=int(input())
+    ss=[input() for _ in range(100)]
+    m=0
+    for row in ss:
+        for i in range(100):
+            s,e=i,i+1
+            while s>=0 and e<100 and row[s]==row[e]:
+                s-=1
+                e+=1
+            m=max(m,e-s-1)
+            s,e=i,i
+            while s>=0 and e<100 and row[s]==row[e]:
+                s-=1
+                e+=1
+            m=max(m,e-s-1)
+    for col in range(100):        
+        for j in range(100):
+            s,e=j,j+1
+            while s>=0 and e<100 and ss[s][col]==ss[e][col]:
+                s-=1
+                e+=1
+            m=max(m,e-s-1)
+            s,e=j,j
+            while s>=0 and e<100 and ss[s][col]==ss[e][col]:
+                s-=1
+                e+=1
+            m=max(m,e-s-1)
+    print("#",t,' ',m,sep='')

@@ -1,0 +1,81 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+ 
+#include<iostream>
+#include<string>
+#include<vector>
+#include<map>
+using namespace std;
+ 
+int helper(string& a, string& b, int idx) {
+    int j = 0;
+    for (int i = idx; i < a.size(); ++i) {
+        int tmp = i;
+        while (tmp < a.size() && j < b.size() && a[tmp] == b[j]) {
+            ++tmp;
+            ++j;
+        }
+        if (tmp >= a.size() && j > 3) {
+            return j;
+        }
+        else {
+            j = 0;
+        }
+    }
+    return -1;
+}
+ 
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+ 
+    //freopen("input.txt", "r", stdin);
+    cin >> T;
+    for (test_case = 1; test_case <= T; ++test_case) {
+        int n = 0, k = 0;
+        cin >> n >> k;
+        vector<string> v(k + 1, "");
+        string st = "", end = "";
+        cin >> st;
+        cin >> end;
+        for (int i = 0; i < k; ++i) {
+            cin >> v[i];
+        }
+        int left = k, idx = 0, ok = k;
+        while (ok) {
+            bool f = true;
+            for (int i = 0; i < k; ++i) {
+                if (v[i] != "") {
+                    int x = helper(st, v[i], idx);
+                    if (x != -1) {
+                        idx = st.size() - x;
+                        st += v[i].substr(x);
+                        v[i] = "";
+                        f = false;
+                        --left;
+                        break;
+                    }
+                }
+            }
+            int x = helper(st, end, idx);
+            if (x != -1) {
+                string tmp = st + end.substr(x);
+                if (tmp.size() == n) {
+                    st = tmp;
+                    break;
+                }
+            }
+            if (f) {
+                break;
+            }
+            --ok;
+        }
+        if (st.size() != n) {
+            st = "";
+        }
+        cout << "#" << test_case << " " << st << endl;
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

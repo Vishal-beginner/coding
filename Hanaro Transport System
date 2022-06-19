@@ -1,0 +1,150 @@
+//Hanaro Transport System
+
+
+#include<iostream>
+ 
+#define abc <bits/stdc++.h>
+#include abc
+ 
+using namespace std;
+ 
+int parent[1000];
+int rrank[1000];
+ 
+/*unsigned long long findLen(int x[],int y[] ,int n,int cnt,int idx,int vis[],unsigned long long len,unsigned long long &minn)
+{
+    if(cnt==n)
+    {   //cout<<len<<" ";
+     if(minn==0)
+         minn=len;
+     else
+         minn = min(minn,len);
+       return len;
+    }
+    unsigned long long minx=-1;
+    for(int i=0;i<n;i++)
+    {
+        if(vis[i]==0)
+        {
+            vis[i]=1;
+            unsigned long long dist = (x[i]-x[idx])*(x[i]-x[idx])+(y[i]-y[idx])*(y[i]-y[idx]);
+            unsigned long long dist2 = findLen(x,y,n,cnt+1,i,vis,len+dist,minn);
+            if(minx=-1)
+                minx = dist2;
+            else
+                minx = min(minx,dist2);
+            vis[i]=0;
+        }
+    }
+    return minx;
+}*/
+ 
+bool compare(pair<unsigned long long,pair<int,int>> &p1 , pair<unsigned long long ,pair<int,int>> &p2)
+{
+    return (p1.first-p2.first<=0?true:false);
+}
+ 
+int find(int i)
+{
+    if(parent[i]==i)
+        return i;
+    else
+    {
+        parent[i] = find(parent[i]);
+        return parent[i];
+    }
+}
+ 
+void unionn(int x , int y )
+{
+    int xpar = find(x);
+    int ypar =find(y);
+    int xrank = rrank[xpar];
+    int yrank = rrank[ypar];
+    if(xrank<yrank)
+        parent[xpar]=ypar;
+    else if(xrank>yrank)
+        parent[ypar] = xpar;
+    else
+    {
+        parent[xpar]=ypar;
+        rrank[ypar]++;
+    }
+     
+}
+void kruskal(vector<pair<unsigned long long , pair<int,int>>> edges,int n,vector<unsigned long long> &lens)
+{
+    
+    for(int i=0;i<n;i++)
+    {parent[i]=i;rrank[i]=0;}
+    for(int i=0;i<edges.size();i++)
+    {
+        if(lens.size()==n-1)
+            return;
+        if(find(edges[i].second.first)==find(edges[i].second.second))
+            continue;
+        lens.push_back(edges[i].first);
+        unionn(edges[i].second.first,edges[i].second.second);
+    }
+     
+}
+ 
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    /* 
+    The freopen function below opens input.txt in read only mode and 
+    sets your standard input to work with the opened file. 
+    When you test your code with the sample data, you can use the function
+    below to read in from the sample data file instead of the standard input.
+    So. you can uncomment the following line for your local test. But you
+    have to comment the following line when you submit for your scores.
+    */
+ 
+    //freopen("input.txt", "r", stdin);
+    cin>>T;
+ 
+    /*
+       Read each test case from standard input.
+    */
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+       
+       int n;
+        double e;
+        cin>>n;
+        long long x[n],y[n];
+        vector<pair<unsigned long long,pair<int,int>>> edges;
+        vector<unsigned long long> lens;
+        for(int i=0;i<n;i++)
+            cin>>x[i];
+        for(int i=0;i<n;i++)
+            cin>>y[i];
+        cin>>e;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                unsigned long long dist = (abs(x[i]-x[j])*abs(x[i]-x[j])+abs(y[i]-y[j])*abs(y[i]-y[j]));
+                edges.push_back({dist,{i,j}});
+                edges.push_back({dist,{j,i}});                 
+            }
+        }
+                                 
+        sort(edges.begin(),edges.end());
+        kruskal(edges,n,lens);
+        unsigned long long int sum=0;
+        cout<<'#'<<test_case<<" ";
+        for(int i=0;i<lens.size();i++)
+        {
+            sum+=lens[i];
+        }
+        double res = e*sum;
+        unsigned long long ans = round(res);
+        cout<<ans<<endl;
+         
+        
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

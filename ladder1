@@ -1,0 +1,68 @@
+
+/*
+Return starting point X from the grid
+*/
+
+#include <iostream>
+using namespace std;
+ 
+int TC,x2,y2,rs;
+int A[101][101];
+bool visited[101][101];
+int dx[3]={0,0,-1};
+int dy[3]={1,-1,0};
+ 
+ 
+bool safe(int a,int b){
+    if (a>=0&&a<100&&b>=0&&b<100)
+    {
+        return true;
+    }
+    return false;
+}
+ 
+int run(int x, int y)
+{
+    while (x>0)
+    {
+        for (int k = 0; k < 3; k++)
+        {
+            int x_new=x+dx[k];
+            int y_new=y+dy[k];
+            if (safe(x_new,y_new)&&visited[x_new][y_new]==0&&A[x_new][y_new]==1)
+            {
+                visited[x_new][y_new]=1;
+                x=x_new;
+                y=y_new;
+            }
+        }
+    }
+    return y;
+}
+ 
+int main()
+{
+    //freopen("input.txt","r",stdin);
+    for (int t = 1; t < 11; t++)
+    {
+        cin >> TC;
+        for (int i = 0; i < 100; i++)
+        {
+            for (int j = 0; j < 100; j++)
+            {
+                cin >> A[i][j];
+                visited[i][j]=0;
+                if (A[i][j]==2)
+                {
+                    x2=i;
+                    y2=j;
+                    visited[i][j]=1;
+                }
+            }
+        }
+        rs=run(x2,y2);
+    cout << "#" << t << " " << rs << endl;
+    }
+ 
+    return 0;
+}

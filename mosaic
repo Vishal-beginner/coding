@@ -1,0 +1,298 @@
+1.balloon shoot permutation
+
+LaughingBomb
+
+You are given a grid of (col x row) with 1's & 0's.
+
+and a bomb is dropped at coordinates by, bx;
+
+for every second it will destory four cells (top, right, bottom, left).
+
+and the next second these 4 destory cells will destory cells in there four directions.
+
+This goes on recurssively.
+
+calculate minimum time, in which entire grid is destoryed.
+
+1 -> number of test cases
+10 10 -> col, row.
+1 1 1 1 0 1 1 0 0 0 -> grid with 1's & 0's
+0 1 1 1 1 1 0 1 1 0
+0 0 1 1 0 1 0 1 1 1
+0 1 1 1 1 1 0 0 1 1
+0 1 0 1 0 1 1 1 1 0
+0 0 0 0 0 1 1 0 0 0
+1 0 1 0 1 0 1 1 0 0
+0 0 1 1 1 1 1 1 1 1
+1 0 1 0 0 1 0 1 1 0
+1 1 1 0 0 0 0 1 1 1
+2 2 -> by, bx (bomb coordinates)
+
+0<= row, col <= 100
+
+output 21 seconds to destory entire grid.
+
+
+// ConsoleApplication1.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+#define MAX 11
+#define MAXVAL(a,b) ((a)>(b)?(a):(b))
+
+int N;
+int baloonsPermutation[MAX];
+int baloons[MAX];
+int visited[MAX];
+int Answer = 0;
+
+
+#define SWAP(a,b) {\
+	int c = (a);\
+	(a) = (b);\
+	(b) = (c);\
+}\
+
+
+void swap(int& a, int& b){
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+
+void init(){
+	N = 0;
+	Answer = 0;
+	for (int i = 0; i < MAX; i++)
+		baloons[i] = 0, visited[i] = false;
+}
+
+int shootBaloon(int pos){
+	int j, next = -1, previous = -1;
+	for (j = pos - 1; j >= 1; j--){
+		if (visited[j] == false){
+			previous = j;
+			break;
+		}
+	}
+	for (j = pos + 1; j <= N; j++){
+		if (visited[j] == false){
+			next = j;
+			break;
+		}
+	}
+
+	if (previous == -1 && next == -1)
+		return baloons[pos];
+	else if (previous == -1)
+		return baloons[next];
+	else if (next == -1)
+		return baloons[previous];
+	else
+		return baloons[previous] * baloons[next];
+	return 0;
+}
+
+void calcShootValue() {
+	int sum = 0;
+	for (int i = 1; i <= N; i++)
+		visited[i] = false;
+	for (int i = 1; i <= N; i++){
+		int pos = baloonsPermutation[i];
+	    sum += shootBaloon(pos);
+		visited[pos] = true;
+	}
+	Answer = MAXVAL(sum, Answer);
+}
+
+void calcPermuation2(int left, int right, int& sum){
+	if (left == right) {
+		Answer = MAXVAL(sum + baloons[baloonsPermutation[left]], Answer);
+		return;
+	}
+
+	for (int i = left; i <= right; i++){
+		swap(baloonsPermutation[left], baloonsPermutation[i]);
+
+		int pos = baloonsPermutation[left];
+		int value = shootBaloon(pos);
+
+		sum += value;
+		visited[pos] = true;
+
+		calcPermuation2(left + 1, right, sum);
+
+		sum -= value;
+		visited[pos] = false;
+		swap(baloonsPermutation[left], baloonsPermutation[i]);
+	}
+}
+
+void calcPermuation(int left, int right){
+	if (left == right) {
+		calcShootValue();
+		return;
+	}
+
+	for (int i = left; i <= right; i++){
+		swap(baloonsPermutation[left], baloonsPermutation[i]);
+		calcPermuation(left + 1, right);
+		swap(baloonsPermutation[left], baloonsPermutation[i]);
+	}
+}
+
+void getMaxScore(){
+	//bruteforce approach
+	//calcPermuation(1, N);
+
+	//backtracking approach
+	//sum can be declared globally as well.
+	int sum = 0;
+	calcPermuation2(1, N, sum);
+}
+
+int main()
+{
+	init();
+	N = 3;
+	int values[] = {0,1,2,3};
+	for (int i = 1; i <= N; i++)
+	{
+		baloons[i] = values[i];
+		baloonsPermutation[i] = i;
+		visited[i] = false;
+	}
+	getMaxScore();
+	printf("#%d\n", Answer);
+	return 0;
+}
+
+
+2.  airplane coin collection 
+You are given grid with coin 1 and enemies 2..grid is always 5
+
+// airplane.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+int game[14][5] = {0};
+int cgame[14][5] = {0};
+int H;
+int answer;
+int start;
+int dest;
+
+int xM[] = {1, 1, 1};
+int yM[] = {0, 1, -1};
+
+void printGame(){
+	for(int i = H; i >= 1; i--){
+		for(int j = 0; j < 5; j++){
+			cout<<game[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+}
+
+void resetGame(){
+	for(int i = H; i >= 0; i--){
+		for(int j = 0; j < 5; j++){
+			game[i][j] = 0;
+			cgame[i][j] = 0;
+		}
+	}
+}
+
+bool isValid(int x, int y){
+	if(x == 0 && y == 2)
+		return true;
+	if(x == H+1)
+		return true;
+	if(x < 0 || x > H || y < 0 || y > 4)
+		return false;
+	return true;
+}
+
+void AirplaneGame(int x, int y, int coinCount){
+	if(!isValid(x, y))
+		return;
+
+	if(game[x][y] == 1)
+		coinCount++;
+
+	if(game[x][y] == 2)
+		coinCount--;
+
+	if(coinCount < 0)
+		return;
+
+	if(x == H+1){
+		answer = coinCount > answer ? coinCount : answer;
+		return;
+	}
+
+	int cx, cy;
+	for(int i = 0; i < 3; i++){
+		cx = x + xM[i];
+		cy = y + yM[i];
+		AirplaneGame(cx, cy, coinCount);
+	}
+
+}
+
+void bombAt(int i){
+	for(int k = i; k < i+5; k++){
+		for(int j = 0; j < 5; j++){
+			if(game[k][j] == 2){
+				game[k][j] = 3;
+			}
+		}
+	}
+}
+
+void unBombAt(int i){
+	for(int k = i; k < i+5; k++){
+		for(int j = 0; j < 5; j++){
+			game[k][j] = cgame[k][j];
+		}
+	}
+}
+
+void calcMaxCoins(){
+	for(int i = 1; i <= H; i++){
+		bombAt(i);
+		AirplaneGame(0, 2, 0);
+	    unBombAt(i);
+	}
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int TC;
+	freopen("input.txt", "r", stdin);
+	cin>>TC;
+	for(int i = 1; i <= TC; i++){
+		cin>>H;
+		for(int i = H; i >= 1; i--){
+			for(int j = 0; j < 5; j++){
+				cin>>game[i][j];
+				cgame[i][j] = game[i][j];
+			}
+		}
+
+		start = 0; dest = H+1;answer = -1;
+		calcMaxCoins();
+		AirplaneGame(start, 2, 0);
+		resetGame();
+		cout<<"#"<<i<<" "<<answer<<endl;
+	}
+	return 0;
+}

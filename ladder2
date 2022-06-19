@@ -1,0 +1,96 @@
+// Returns x with shortest distance
+
+#include<bits/stdc++.h>
+#include<iostream>
+ 
+using namespace std;
+int mat[100][100];
+bool vis[100][100];
+int shrtpath = INT_MAX;
+ 
+bool issafe(int x, int y)
+{
+    if (x >= 100 || x < 0 || y >= 100 || y < 0 || vis[x][y] == true || mat[x][y] == 0)
+    {
+        return false;
+    }
+    return true;
+}
+ 
+void dfs(int x, int y, int path, bool& reach)
+{
+    vis[x][y] = true;
+    if (x == 99)
+    {
+         
+        if (path <= shrtpath)
+        {
+             
+           reach = true;
+            shrtpath=path;
+        }
+          
+        return;
+ 
+    }
+ 
+     
+    static int row[] = { 0,0,1 };
+    static int col[] = { 1,-1,0 };
+ 
+    for (int i = 0; i < 3; i++)
+    {
+        int nx = x + row[i];
+        int ny = y + col[i];
+        if (issafe(nx, ny))
+        {
+            dfs(nx, ny, path + 1, reach);
+            break;
+        }
+    }
+    vis[x][y] = false;
+     
+}
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+     
+ 
+    //freopen("input.txt", "r", stdin);
+     
+ 
+     
+    for (test_case = 1; test_case <= 10;++test_case)
+    {
+        cin >> T;
+        for (int i = 0; i < 100; i++)
+        {
+            for (int j = 0; j < 100; j++)
+            {
+                cin >> mat[i][j];
+                vis[i][j] = false;
+            }
+ 
+ 
+        }
+        int ans = -1;
+        for (int j = 0; j < 100; j++)
+        {
+            bool reach = false;
+            //int path = 0;
+            if (mat[0][j] == 1)
+            {
+                dfs(0, j, 1, reach);
+                if (reach == true)
+                {
+                    ans = j;
+                }
+            }
+        }
+             
+        cout << "#" << T << " " << ans << endl;
+        shrtpath = INT_MAX;
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

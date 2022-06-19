@@ -1,0 +1,77 @@
+// oPTIMAL pATH - mR kIM Ncustomers refrigerator deliver (office-delivery-home)
+
+
+
+#define cheat <bits/stdc++.h>
+#include cheat
+#define ll long long
+#define _CRT_SECURE_NO_WARNINGS
+using namespace std;
+int x[10], y[10];
+int dp[1024][10];
+int rec(int mask, int dx, int dy, int prev,int n)
+{
+    if (mask == pow(2, n)-1)
+    {
+        dp[mask][prev]=(abs(dx - x[prev]) + abs(dy - y[prev]));
+        return dp[mask][prev];
+    }
+    if (prev >=n)
+        return 0;
+    if(dp[mask][prev]!=-1)
+        return dp[mask][prev];
+    int ans = INT_MAX;
+    for (int i = 0; i < n; i++)
+    {
+        int msk=mask;
+        if (!(mask&(1 << i)))
+        {
+            ans = min(ans, abs(x[i] - x[prev]) + abs(y[i] - y[prev]) + rec(mask | (1 << i), dx, dy, i, n));
+            dp[msk][prev]=ans;
+        }
+    }
+    return ans;
+}
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    /*
+    The freopen function below opens input.txt in read only mode and
+    sets your standard input to work with the opened file.
+    When you test your code with the sample data, you can use the function
+    below to read in from the sample data file instead of the standard input.
+    So. you can uncomment the following line for your local test. But you
+    have to comment the following line when you submit for your scores.
+    */
+ 
+    cin >> T;
+ 
+    /*
+    Read each test case from standard input.
+    */
+ 
+    for (test_case = 1; test_case <= T; ++test_case)
+    {
+        int n;
+        cin >> n;
+        int sx, sy, dx, dy;
+        cin >> dx>>dy>>sx >> sy;
+        for (int i = 0; i < n; i++)
+        {
+            cin >> x[i] >> y[i];
+        }
+        int ans = INT_MAX;
+        memset(dp,-1,sizeof(dp));
+        for (int i = 0; i < n; i++)
+        {
+            int dis = abs(x[i] - sx) + abs(y[i] - sy);
+            int mask = 0;
+            dp[mask][i] = min(ans, dis + rec(mask|(1<<i), dx, dy, i,n));
+            ans=dp[mask][i];
+        }
+        cout << "#" << test_case << " " << ans << endl;
+             
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

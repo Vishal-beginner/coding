@@ -1,0 +1,159 @@
+#include<iostream>
+ 
+using namespace std;
+ 
+class Val{
+public:
+    int n;
+    int m;
+    Val(){
+ 
+    }
+    Val(int n, int m)
+    {
+        this->n = n;
+        this->m = m;
+ 
+    }
+ 
+     
+};
+ 
+Val ans[100];
+ 
+int vis[100][100];
+ 
+void setVisZero()
+{
+    for (int i = 0; i < 100; i++)
+    {
+        for (int j = 0; j < 100; j++)
+        {
+            vis[i][j] = 0;
+        }
+    }
+}
+ 
+ 
+ 
+void calPath(int i,int j,int arr[100][100],int n,int cnt)
+{
+    int si = i;
+    int sj = j;
+ 
+    while (arr[i][j] != 0 && i<n)
+    {
+        i++;
+    }
+    int li = i;
+    while (arr[si][j] != 0 && j<n)
+    {
+        j++;
+    }
+    int lj = j;
+ 
+    for (int i = si; i <= li; i++)
+    {
+        for (int j = sj; j <= lj; j++)
+        {
+            vis[i][j] = 1;
+        }
+    }
+    Val v(li-si,lj-sj);
+    ans[cnt] =v;
+ 
+     
+}
+ 
+ 
+void sort(int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n-1; j++)
+        {
+            if (ans[j].n*ans[j].m>ans[j + 1].n*ans[j + 1].m)
+            {
+                swap(ans[j], ans[j + 1]);
+            }
+            else if (ans[j].n*ans[j].m == ans[j + 1].n*ans[j + 1].m && ans[j].n>ans[j + 1].n)
+                swap(ans[j], ans[j + 1]);
+        }
+    }
+}
+ 
+void a007k(int test)
+{
+    int n;
+    cin >> n;
+ 
+ 
+    int arr[100][100];
+ 
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> arr[i][j];
+        }
+    }
+ 
+    setVisZero();
+    int cnt = 0;
+ 
+   for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (arr[i][j]!=0 && vis[i][j] == 0)
+            {
+                calPath(i,j,arr,n,cnt);
+                cnt++;
+ 
+            }
+        }
+    }
+     
+   cout <<"#"<<test<<" "<< cnt << " ";
+   sort(cnt);
+   for (int i = 0; i < cnt; i++)
+   {
+       cout << ans[i].n << " " << ans[i].m << " ";
+   }
+   cout << endl;
+}
+ 
+ 
+ 
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    /* 
+    The freopen function below opens input.txt in read only mode and 
+    sets your standard input to work with the opened file. 
+    When you test your code with the sample data, you can use the function
+    below to read in from the sample data file instead of the standard input.
+    So. you can uncomment the following line for your local test. But you
+    have to comment the following line when you submit for your scores.
+    */
+ 
+    //freopen("input.txt", "r", stdin);
+    cin>>T;
+ 
+    /*
+       Read each test case from standard input.
+    */
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+ 
+        /////////////////////////////////////////////////////////////////////////////////////////////
+        /*
+            Please, implement your algorithm from this section.
+        */
+        /////////////////////////////////////////////////////////////////////////////////////////////
+       a007k(test_case);
+ 
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

@@ -1,0 +1,117 @@
+#include<iostream>
+#include<string>
+using namespace std;
+ 
+ 
+void printoutput(int t)
+{
+    int k, n;
+    cin >> k>>n;
+    int arr[10] = { 0 };
+ 
+ 
+    for (int i = 0; i < n; i++)
+    {
+        string s;
+        cin >> s;
+ 
+        if (s == "ZRO")
+        {
+            arr[0]++;
+        }
+        if (s == "ONE")
+        {
+            arr[1]++;
+        }
+        if (s == "TWO")
+        {
+            arr[2]++;
+        }
+        if (s == "THR")
+        {
+            arr[3]++;
+        }
+        if (s == "FOR")
+        {
+            arr[4]++;
+        }
+        if (s == "FIV")
+        {
+            arr[5]++;
+        }
+        if (s == "SIX")
+        {
+            arr[6]++;
+        }
+        if (s == "SVN")
+        {
+            arr[7]++;
+        }
+        if (s == "EGT")
+        {
+            arr[8]++;
+        }
+        if (s == "NIN")
+        {
+            arr[9]++;
+        }
+ 
+    }
+    cout << "#" << t << endl;
+    for (int i = 0; i < arr[0]; i++)
+    {
+        cout << "ZRO ";
+    }
+    for (int i = 0; i < arr[1]; i++)
+    {
+        cout << "ONE ";
+    }
+    for (int i = 0; i < arr[2]; i++)
+    {
+        cout << "TWO ";
+    }
+    for (int i = 0; i < arr[3]; i++)
+    {
+        cout << "THR ";
+    }
+    for (int i = 0; i < arr[4]; i++)
+    {
+        cout << "FOR ";
+    }
+    for (int i = 0; i < arr[5]; i++)
+    {
+        cout << "FIV ";
+    }
+    for (int i = 0; i < arr[6]; i++)
+    {
+        cout << "SIX ";
+    }
+    for (int i = 0; i < arr[7]; i++)
+    {
+        cout << "SVN ";
+    }
+    for (int i = 0; i < arr[8]; i++)
+    {
+        cout << "EGT ";
+    }
+    for (int i = 0; i < arr[9]; i++)
+    {
+        cout << "NIN ";
+    }
+     
+ 
+ 
+}
+ 
+ 
+int main()
+{
+    int t;
+    cin >> t;
+ 
+    for (int i = 1; i <= t;i++)
+    {
+        printoutput(i);
+    }
+ 
+}

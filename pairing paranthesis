@@ -1,0 +1,72 @@
+#include<iostream>
+#include<bits/stdc++.h>
+//#include<string>
+using namespace std;
+
+
+
+int checkvalidity(char exp[], int len,stack<char> e)
+{
+for(int i=0;i<len;++i)
+{
+    if(e.empty()){
+                e.push(exp[i]);
+            }
+	
+    else if((exp[i]=='}' && e.top()=='{') || (exp[i]==')' && e.top()=='(') || (exp[i]==']' && e.top()=='[') || (exp[i]=='>' && e.top()=='<'))
+		e.pop();
+ 	else
+        e.push(exp[i]);
+}
+    if(e.empty())
+        return 1;
+    else
+    // {	while(!e.empty())
+    // { e.pop();}
+     {   return 0;
+    }
+}
+
+int main(int argc, char** argv)
+{
+	int test_case;
+	int T=10;
+    int ans;
+	/* 
+	The freopen function below opens input.txt in read only mode and 
+	sets your standard input to work with the opened file. 
+	When you test your code with the sample data, you can use the function
+	below to read in from the sample data file instead of the standard input.
+	So. you can uncomment the following line for your local test. But you
+	have to comment the following line when you submit for your scores.
+	*/
+
+	//freopen("input.txt", "r", stdin);
+	
+
+	/*
+	   Read each test case from standard input.
+	*/
+	for(test_case = 1; test_case <= T; ++test_case)
+	{   int len;
+		stack<char> e;
+		cin>>len;
+        char exp[len];
+       for(int i=0;i<len;++i)
+            cin>>exp[i];
+       	
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/*
+			Please, implement your algorithm from this section.
+		*/
+        
+        
+        ans= checkvalidity(exp,len,e);
+        cout<<"#"<<test_case<<" "<<ans<<endl;
+		/////////////////////////////////////////////////////////////////////////////////////////////
+// 		 for(int i=0;i<len;++i)
+//             exp[i]='\0';
+
+	}
+	return 0;//Your program should return 0 on normal termination.
+}

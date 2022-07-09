@@ -1,0 +1,161 @@
+A countryhas found out that there is a spy at a broadcasting network within the country.The spy was transmitting video by inserting cryptographic codes into it. It wasfound that a code consists of numbers that indicate important facilities in thecountry. Cryptographic code rules are as follows.   
+
+
+
+
+Company A istrying to develop a scanner that can recognize these cryptographic codesaccurately and fast. Performance of the scanner is measured with the followingmethods.
+
+
+
+
+
+
+#include<iostream>
+#include<bits/stdc++.h>
+//# define WARNING
+using namespace std;
+ 
+string binary(char c){
+    string keys[16] = {"0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+                       "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"};
+    if(c >= '0' && c <= '9')
+        return keys[c - '0'];
+    else return keys[c - 'A' + 10];
+}
+int get_num(string s, int multiplier){
+    string code = "";
+    int count = 1;
+    for(int i = 1;i < s.size(); i++){
+        if(s[i] == '0' ){
+            if(s[i - 1] == '0')
+                count++;
+            else{
+                code += (count/multiplier + '0');
+                count = 1;
+            }
+        }else if(s[i] == '1'){
+            if(s[i - 1] == '1')
+                count++;
+            else{
+                code += (count/multiplier + '0');
+                count = 1;
+            }
+        }
+    }
+    code += (count/multiplier + '0');
+    # ifdef WARNING
+    if(code.size() != 4){
+        cout<<"Warning from Get Num Code Size Not equal to 4 --> "<<code<<" "<<s<<"  "<<multiplier<<endl;
+    }
+    # endif
+    string keys[10] = {"3211", "2221", "2122", "1411", "1132", "1231", "1114", "1312", "1213", "3112"};
+    for(int z = 0; z < 10; z++){
+        if(code == keys[z])
+            return z;
+     
+    }
+    # ifdef WARNING
+    cout<<"WARNING From Get Num, Code is not in Keys, Returning -1  "<<code<<endl;
+    # endif
+    return -1;
+ 
+}
+ 
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+ 
+    cin>>T;
+    //T = 5;
+     
+    for(test_case = 1; test_case <= T; ++test_case)
+    {
+        // Part I identifying Codes
+        set<string> codes;
+        int row, col;
+        cin>>row>>col;
+        for(int i = 0;i < row; i++){
+            string inter = "";
+            bool add_me = false;
+            int start_index = 0, end_index = -1;
+            string cur_row = "";
+            for(int j = 0;j < col; j++){
+                char current;
+                cin>>current;
+                inter += current;
+                if(current != '0' && start_index == 0)
+                    start_index = j;
+                if(current != '0')
+                    end_index = j;
+                 
+             
+            }
+            inter = inter.substr(start_index, end_index - start_index + 1);
+            if(inter.size() != 0)
+                codes.insert(inter);
+        }
+       /* cout<<"FOUND CODES ARE "<<endl;
+       for(auto it = codes.begin(); it != codes.end(); it++)
+                cout<<*it<<" ";
+        cout<<endl; */
+        int out_sum = 0;
+        // Part 2 , Extracting Binary and adding required Zeroes
+        for(auto it = codes.begin(); it != codes.end(); it++){
+            auto cur = *it;
+            // cur = "1DB176C588D26EC";
+            string bin = "";
+            //  Exttracting Binary
+            for(auto c: cur)
+                bin += binary(c);
+             
+            // Appending Zero at the start
+            int start_one = 0, end_one = bin.size();
+            for(int i = 0; i < bin.size(); i++)
+                if(bin[i] == '1'){
+                    start_one = i;
+                    break;
+                }
+            for(int i = bin.size() - 1; i >= 0; i--)
+                if(bin[i] == '1'){
+                    end_one = i;
+                    break;
+                }
+            bin = bin.substr(start_one, end_one - start_one + 1 );
+             
+             
+            if(bin.size() % 56 != 0){
+                # ifdef WARNING
+                //cout<<cur<<endl;
+                 //cout<<"Warning Code Size is not equal to zero, Need to append zero at start "<<bin.size()<<endl;
+                # endif
+                while(bin.size() % 56 != 0){
+                    bin = "0" + bin;
+                }
+                // cout<<bin<<endl;
+            }
+             
+            // Getting 8 numbers from that Binary
+            int multiplier = bin.size()/56;
+            int num_length = multiplier*7;
+            int nums[8] = {0}; 
+ 
+            for(int i = 0, j = 0;i < bin.size(); i += num_length, j++){
+                nums[j] = get_num(bin.substr(i, num_length), multiplier);
+            }
+            int odd = nums[0] + nums[2] + nums[4] + nums[6], even = nums[1] + nums[3] + nums[5]; 
+            int code_val = odd*3 + even + nums[7];
+            int sum = 0;
+            if(code_val%10 == 0){
+                for(int i = 0;i < 8; i++)
+                    sum += nums[i];
+                out_sum += sum;
+            }
+            // cout<<cur<<" "<<sum<<endl;
+         
+        }
+        cout<<"#"<<test_case<<" "<<out_sum<<endl;
+ 
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

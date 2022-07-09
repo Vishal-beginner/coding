@@ -1,0 +1,70 @@
+#include<iostream>
+using namespace std;
+ 
+ 
+void num_standstills(int t)
+{
+    int n;
+    cin >> n;
+    int arr[100][100];
+ 
+    for (int i =0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            cin >> arr[i][j];
+        }
+    }
+ 
+ 
+    for (int j = 0; j < n; j++)
+    {
+        int i = 0;
+        while (i < n && arr[i][j] != 1)
+        {
+            arr[i][j] = 0;
+            i++;
+        }
+ 
+        i = n-1;
+ 
+        while (i >=0 && arr[i][j] != 2)
+        {
+            arr[i][j] = 0;
+            i--;
+        }
+ 
+    }
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int j = 0;
+        while (j<n)
+        {
+            while (j<n&&(arr[j][i] == 1 || arr[j][i] == 0))
+            {
+                j++;
+            }
+            while (j<n&&(arr[j][i] == 2|| arr[j][i]==0))
+            {
+                j++;
+            }
+ 
+ 
+            cnt++;
+        }
+    }
+ 
+    cout << "#" << t << " " << cnt << endl;
+}
+ 
+ 
+int main()
+{
+ 
+    for (int i = 1; i <= 10; i++)
+    {
+        num_standstills(i);
+    }
+ 
+}

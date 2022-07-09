@@ -1,0 +1,106 @@
+A countryhas found out that there is a spy at a broadcasting network within the country.The spy was transmitting video by inserting cryptographic codes into it. It wasfound that a code consists of numbers that indicate important facilities in thecountry. Cryptographic code rules are as follows.   
+
+
+
+
+Company A istrying to develop a scanner that can recognize these cryptographic codesaccurately and fast. Performance of the scanner is measured with the followingmethods.
+
+
+
+
+
+
+#define cheat <bits/stdc++.h>
+#include cheat
+#define ll long long
+#define _CRT_SECURE_NO_WARNINGS
+using namespace std;
+int a[51][101];
+int main(int argc, char** argv)
+{
+    int test_case;
+    int T;
+    /*
+    The freopen function below opens input.txt in read only mode and
+    sets your standard input to work with the opened file.
+    When you test your code with the sample data, you can use the function
+    below to read in from the sample data file instead of the standard input.
+    So. you can uncomment the following line for your local test. But you
+    have to comment the following line when you submit for your scores.
+    *
+ 
+    freopen("input.txt", "r", stdin);
+     
+ 
+    /*
+    Read each test case from standard input.
+    */
+    cin >> T;
+ 
+    for (test_case = 1; test_case <= T; ++test_case)
+    {
+        int n, m;
+        cin >> n >> m;
+        for (int i = 0; i < n; i++)
+        {
+            string s;
+            cin >> s;
+            for (int j = 0; j < m; j++)
+            {
+                 a[i][j]=s[j]-'0';
+            }
+ 
+        }
+        int x=-1, y=-1;
+        for (int i = m - 1; i >= 0; i--)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (a[j][i] == 1)
+                {
+                    x = j;
+                    y = i;
+                    break;
+                }
+            }
+            if (x != -1)
+                break;
+        }
+        map<string, int>mp;
+        mp["3211"] = 0;
+        mp["2221"] = 1;
+        mp["2122"] = 2;
+        mp["1411"] = 3;
+        mp["1132"] = 4;
+        mp["1231"] = 5;
+        mp["1114"] = 6;
+        mp["1312"] = 7;
+        mp["1213"] = 8;
+        mp["3112"] = 9;
+        vector<int>v;
+        for (int i = y - 55; i <= y; i+=7)
+        {
+            string s = "";
+            int prev = a[x][i];
+            int cn = 1;
+            for (int j = 1; j < 7; j++)
+            {
+                if (a[x][i + j] == prev)
+                    cn++;
+                else
+                {
+                    s = s + to_string(cn);
+                    cn = 1;
+                    prev = a[x][i + j];
+                }
+            }
+            s = s + to_string(cn);
+            v.push_back(mp[s]);
+        }
+        int ans = v[0] + v[1] + v[2] + v[3] + v[4] + v[5] + v[6] + v[7];
+        if (((v[0] + v[2] + v[4] + v[6]) * 3 + v[1] + v[3] + v[5] + v[7]) % 10 != 0)
+            ans = 0;
+        cout << "#" << test_case << " " <<ans<< endl;
+    }
+    return 0;//Your program should return 0 on normal termination.
+}

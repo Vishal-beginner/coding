@@ -1,0 +1,88 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+ 
+double value(int d[],int m[],double mid,int in,int n,int f )
+{
+    double ans=0;
+    if (f == 0)
+    {
+        for (int i = 0; i <= in; i++)
+        {
+            double r = (mid - d[i]);
+            ans += (m[i] /(r*r));
+        }
+    }
+    else
+    {
+        for (int i = in + 1; i < n; i++)
+        {
+            double r = (d[i] - mid);
+            ans += (m[i] /(r*r));
+        }
+    }
+ 
+    return ans;
+}
+ 
+double cal(int d[], int m[], int i, int n)
+{   
+    double h = d[i + 1];
+    double l = d[i];
+    double mid=(h+l)/2.0;
+    while (h > l && h - l > 1e-12)
+    {
+        mid = (h + l) / 2.0;
+ 
+        double lv = value(d,m,mid,i,n,0);
+        double rv = value(d,m,mid,i,n,1);
+ 
+        if (lv > rv)
+            l = mid;
+        else if (rv > lv)
+            h = mid;
+        else
+            break;
+    }
+ 
+ 
+    return mid;
+}
+ 
+void a007k(int t)
+{
+    int n;
+    cin >> n;
+    int d[10] = { 0 }, m[10] = { 0 };
+ 
+    for (int i = 0; i < n; i++)
+    {
+        cin >> d[i];
+    }
+    for (int i = 0; i < n; i++)
+    {
+        cin >> m[i];
+    }
+    cout<<fixed;
+    cout << "#" << t << " ";
+    for (int i = 0; i < n - 1; i++)
+    {
+        double ans=cal(d,m,i,n);
+        cout<<std::setprecision(10)<<ans<<" ";
+    }
+    cout << endl;
+ 
+}
+ 
+int main()
+{
+    int n;
+    cin >> n;
+ 
+    for (int i = 1; i <= n; i++)
+    {
+        a007k(i);
+    }
+ 
+    //system("PAUSE");
+}

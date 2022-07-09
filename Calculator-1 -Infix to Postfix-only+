@@ -1,0 +1,74 @@
+#include<iostream>
+#include<string>
+#include<bits/stdc++.h>
+using namespace std;
+
+int ans;
+int l;
+string exp_;
+
+int postfixeval()
+{
+	stack<int> ans;
+    char temp;
+    for(int i=1;i<l;i+=2)
+{
+		temp =exp_[i];
+        exp_[i]=exp_[i+1];
+        exp_[i+1]=temp;
+}
+
+for(int i=0;i<l;++i)
+{
+	if(exp_[i]=='+')
+    {
+    int a,b;
+        a=ans.top();
+        ans.pop();
+        b=ans.top();
+        ans.pop();
+        ans.push(a+b);
+    }
+    else
+		ans.push(exp_[i]-48);
+
+}
+return ans.top();
+}
+
+
+int main(int argc, char** argv)
+{
+	int test_case;
+	int T=10;
+	/* 
+	The freopen function below opens input.txt in read only mode and 
+	sets your standard input to work with the opened file. 
+	When you test your code with the sample data, you can use the function
+	below to read in from the sample data file instead of the standard input.
+	So. you can uncomment the following line for your local test. But you
+	have to comment the following line when you submit for your scores.
+	*/
+
+	//freopen("input.txt", "r", stdin);
+	//cin>>T;
+
+	/*
+	   Read each test case from standard input.
+	*/
+	for(test_case = 1; test_case <= T; ++test_case)
+	{
+		cin>>l;
+        exp_.clear();
+        cin>>exp_;
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		/*
+			Please, implement your algorithm from this section.
+		*/
+        ans = postfixeval();
+		/////////////////////////////////////////////////////////////////////////////////////////////
+cout<<"#"<<test_case<<" "<<ans<<endl;
+
+	}
+	return 0;//Your program should return 0 on normal termination.
+}

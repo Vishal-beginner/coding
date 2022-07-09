@@ -1,0 +1,190 @@
+[Problem]
+
+
+
+
+A formula consisting of four fundamental arithmetic operations can be expressed in a binary tree. Following diagram depicts a formula “(9/(6-4))*3” in a binary tree.
+
+
+
+
+If an operator is in a peak, the operator is applied using the result of the left subtree and result of right subtree.
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+Create a program outputting the calculation result of a formula when a binary tree consisting of only the operators “+,-, *, /” and positive integer is given.
+
+
+
+
+All operations are based on real number operations. If the final result is not an integer, only the integer part is output. In the above, the calculation result is 13.5, thus 13 is output.
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+[Constraints]
+
+
+
+
+Total number of peaks N is 1≤N≤1000.
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+[Input]
+
+
+
+
+In the first line of the input file, total number of peaks N(1≤N≤1000) of the tree of each test case is given. The peak data are given in the next n lines. If the peak is a number, the peak number and the value are given. If the peak is an operator, the peak number, operator, peak number of left child and peak number of right child are given in that order.
+
+
+
+
+An integer between 1 ~ N is given as the peak number. There is no special rule for numbering the peak.However, the number of the root peak is always 1.
+
+
+
+
+The adjacent numbers or operators are all separated by the space.
+
+
+
+
+In the above example, if the number 4 corresponds to the 7th peak, it is given “7 4”. If the operator ‘/’ corresponds to the 2nd peak, it is given “2 / 4 5” since two child nodes are the 4th peak with number 9 and 5th peak with operator ‘-‘.
+
+
+
+
+Total of 10 test cases are given.
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+ 
+
+
+
+
+[Output]
+
+
+
+
+Output the answer to each test case. Each line begins with ‘#x’, and the answer is recorded after a line feed. Note that the answer is always recorded in an integer form.
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+typedef struct{
+    char ch;
+    int n1;
+    int n2;
+}st;
+st ar[1001];
+int n;
+void compute(int i)
+{
+    if(ar[i].ch=='@')
+    {
+        return;
+    }
+    compute(ar[i].n1);
+    compute(ar[i].n2);
+    if(ar[i].ch=='+')
+    {
+        ar[i].n1=ar[ar[i].n1].n1+ar[ar[i].n2].n1;
+    }
+    if(ar[i].ch=='-')
+    {
+        ar[i].n1=ar[ar[i].n1].n1-ar[ar[i].n2].n1;
+    }
+    if(ar[i].ch=='*')
+    {
+        ar[i].n1=ar[ar[i].n1].n1*ar[ar[i].n2].n1;
+    }
+    if(ar[i].ch=='/')
+    {
+        ar[i].n1=ar[ar[i].n1].n1/ar[ar[i].n2].n1;
+    }
+    return ;
+}
+         
+     
+int main(int argc, char** argv)
+{
+    int test_case;
+     
+    for(test_case = 1; test_case <= 10; ++test_case)
+    {
+        for(int i=0;i<1001;i++)
+        {
+            ar[i].ch='@';
+            ar[i].n1=0;
+            ar[i].n2=0;
+        }
+        cin>>n;
+        for(int i=1;i<=n;i++)
+        {
+            int k;
+             
+            cin>>k;
+            string str;
+            cin>>str;
+            if(str=="+"||str=="-"||str=="*"||str=="/")
+            {
+                ar[k].ch=str[0];
+                cin>>ar[k].n1>>ar[k].n2;
+            }
+            else
+                ar[k].n1=stoi(str);
+        }
+        compute(1);
+        cout<<"#"<<test_case<<" "<<ar[1].n1<<endl;
+    }
+    return 0;
+}
